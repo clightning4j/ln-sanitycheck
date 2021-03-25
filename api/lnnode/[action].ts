@@ -1,27 +1,30 @@
 import type { APIRequest } from "aleph/types.ts";
-import { useDeno } from "https://deno.land/x/aleph/mod.ts";
 
 const store = globalThis as any;
 
 export default async function handler(req: APIRequest) {
   switch (req.params.action) {
     case "ping":
-      // TODO ping node with id
-      const pingNode = useDeno(async () => {
-        return await (await fetch(
-          "http://localhost:7000/network/ping/" + req.params[0],
-        )).json();
-      }, true);
+      console.debug("Ping node " + req.params[0]);
+      const pingNode = await (await fetch(
+        "http://localhost:7000/network/ping/" + req.params[0],
+      )).json();
       req.status(200).json(pingNode);
       break;
     case "autoping":
-      //TODO call getinfo
-      const getInfoNode = useDeno(async () => {
-        return await (await fetch("http://localhost:7000/utility/getinfo"))
-          .json();
-      }, true);
+      console.debug("Calling autoping");
+      const resultRequest = await fetch(
+        "http://localhost:7000/utility/getinfo",
+      );
+      const getInfoNode = await resultRequest.json();
+      console.debug(JSON.stringify(getInfoNode));
       req.status(200).json(getInfoNode);
       break;
+    case "listnodes":
+      const response = await fetch("http://localhost:7000/network/listnodes");
+      const listNodes = await response.json();
+      console.debug(JSON.stringify(listNodes));
+      req.status(200).json(listNodes);
     default:
       req.status(400).json({
         error: "UnknownAction",
