@@ -67,16 +67,16 @@ export default function Home() {
                   justify="center"
                   alignItems="center"
                 >
-                  <Grid item xs="3" />
-                  <Grid item xs="6" style={{ marginBottom: "1em" }}>
+                  <Grid item xs={3} />
+                  <Grid item xs={6} style={{ marginBottom: "1em" }}>
                     <Chip
                       label={infoNode["alias"]}
                       style={{ background: "#" + infoNode["color"] }}
                     />
                   </Grid>
-                  <Grid item xs="3" />
+                  <Grid item xs={3} />
                 </Grid>
-                <Grid direction="row" justify="center" alignItems="center">
+                <Grid>
                   <QRCode
                     value={nodeAddress}
                     level="M"
@@ -84,8 +84,8 @@ export default function Home() {
                   />
                 </Grid>
                 <Grid container>
-                  <Grid item xs="3" />
-                  <Grid item xs="3" space="3">
+                  <Grid item xs={3} />
+                  <Grid item xs={3} space="3">
                     <IconButton
                       onClick={autoping}
                       color="inherit"
@@ -94,7 +94,7 @@ export default function Home() {
                       <Sync />
                     </IconButton>
                   </Grid>
-                  <Grid item xs="6" space={3}>
+                  <Grid item xs={6} space={3}>
                     <IconButton
                       onClick={getListNodes}
                       color="inherit"
