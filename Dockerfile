@@ -1,4 +1,4 @@
-FROM hayd/alpine-deno:1.9.0
+FROM hayd/ubuntu-deno:1.9.0
 LABEL mantainer="Vincenzo Palazzo vincenzopalazzodev@gmail.com"
 
 RUN deno install --unstable -A -f -n aleph https://deno.land/x/aleph@v0.3.0-alpha.31/cli.ts

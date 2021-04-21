@@ -1,22 +1,7 @@
 version: "3.8"
 
 services:
-    #ngnix:
-    #  depends_on:
-    #    - lnchecker
-    #  image: nginx:latest
-    #  volumes:
-    #    - ./nginx.conf:/etc/nginx/conf.d/default.conf
-    #  networks:
-    #    default:
-    #      aliases:
-    #        - lnchecker
-    #  ports: 
-    #    - 80:80
-    #  restart: on-failure
     lnchecker:
       build: .
-    #    ports: 
-    #      - 80:8080
-      network_mode: "host"
+      network_mode: host
       restart: on-failure
