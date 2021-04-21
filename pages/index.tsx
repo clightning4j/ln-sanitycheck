@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AppBar,
   Box,
@@ -16,35 +16,45 @@ import { Add, Menu, Sync } from "@material-ui/icons";
 import { QRCode } from "react-qr-svg";
 import useNode from "../lib/useNode.ts";
 import NodesTable from "../components/NodesTable.tsx";
+import Offiline from "../components/Offiline.tsx"
 
 export default function Home() {
-  let [infoNode, listChannels, listNodes, isOnline, ping, autoping, getListChannels, getListNodes] = useNode();
-  const [alerVisible, setAlertVisible] = useState(false);
+  let [
+    infoNode,
+    listChannels,
+    listNodes,
+    isOnline,
+    ping,
+    autoping,
+    getListChannels,
+    getListNodes,
+  ] = useNode();
+
+  const [alerVisible, setAlertVisible] = useState({"visible": false, "message": ""});
   const [loading, setLoading] = useState(false);
-  const [render, setReander] = useState(true)
+  const [render, setReander] = useState(true);
 
-  const aliasNode = infoNode != undefined ? infoNode["alias"] : "";
-
+  const aliasNode = infoNode !== undefined ? infoNode["alias"] : "";
   // this need to be dinamic
-  const addressesNode = infoNode != undefined ? infoNode["address"][0] : "";
+  console.debug(`Info node: ${infoNode}`);
+  const addressesNode = (infoNode !== undefined && infoNode["address"] !== undefined) ? infoNode["address"][0] : "";
   let nodeAddress = addressesNode !== ""
     ? `${infoNode["id"]}@${addressesNode["address"]}:${addressesNode["port"]}`
     : "";
 
-    
-
-    useEffect(() => {
-      new Promise(resolve => setTimeout(() => resolve(), 2500)).then(() => {
-        const el = document.querySelector(".loader-container");
-        if (el) {
-          el.remove();  // removing the spinner element
-          setReander(false); // showing the app
-        }
-      });
+  useEffect(() => {
+    new Promise((resolve) => setTimeout(() => resolve(), 100)).then(() => {
+      const el = document.querySelector(".loader-container");
+      if (el) {
+        el.remove(); // removing the spinner element
+        setReander(false); // showing the app
+      }
     });
+  });
 
-  if (render)
+  if (render) {
     return null;
+  }
   return (
     <Container maxWidth="xl">
       <AppBar position="sticky">
@@ -61,8 +71,8 @@ export default function Home() {
             {aliasNode}
           </Typography>
           <Chip
-            label={infoNode === "" ? "Offline" : "Online"}
-            style={{ background: infoNode === "" ? "#f78c6c" : "#009688" }}
+            label={addressesNode === "" ? "Offline" : "Online"}
+            style={{ background: addressesNode === "" ? "#f78c6c" : "#009688" }}
           />
         </Toolbar>
       </AppBar>
@@ -74,7 +84,8 @@ export default function Home() {
           justify="center"
           alignItems="center"
         >
-          {aliasNode !== "" &&
+          {addressesNode === "" && <Offiline />} 
+          {addressesNode !== "" &&
             <Card>
               <CardContent>
                 <Grid
@@ -103,7 +114,10 @@ export default function Home() {
                   <Grid item xs={3} />
                   <Grid item xs={3} space="3">
                     <IconButton
-                      onClick={autoping}
+                      onClick={
+                        autoping
+                      }
+                      disabled={addressesNode === ""}
                       color="inherit"
                       aria-label="reload"
                     >
@@ -112,7 +126,11 @@ export default function Home() {
                   </Grid>
                   <Grid item xs={6} space={3}>
                     <IconButton
-                      onClick={() => {setLoading(true); getListNodes();}}
+                      onClick={() => {
+                        setLoading(true);
+                        getListNodes();
+                      }}
+                      disabled={addressesNode === ""}
                       color="inherit"
                       aria-label="reload"
                     >
@@ -123,21 +141,26 @@ export default function Home() {
               </CardContent>
             </Card>}
         </Grid>
-        <NodesTable
+        {addressesNode !== ""&& <NodesTable
           channels={listChannels}
           nodes={listNodes}
           ping={ping}
           isLoading={loading}
           endLoading={setLoading}
-        />
-      </Box>
-      {alerVisible &&
-        <Snackbar
-          open={alerVisible}
-          autoHideDuration={6000}
-          onClose={() => setAlertVisible(false)}
-          message={`Main node ${isOnline === true ? "Online" : "Offiline"}`}
+          comunicate={setAlertVisible}
         />}
+        
+      </Box>
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right"
+        }}
+        open={alerVisible["visible"]}
+        autoHideDuration={6000}
+        onClose={() => setAlertVisible({"visible": false, "message": ""})}
+        message={alerVisible["message"]}
+      />
     </Container>
   );
 }

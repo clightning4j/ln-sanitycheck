@@ -3,31 +3,38 @@ import type { APIRequest } from "aleph/types.ts";
 const store = globalThis as any;
 
 export default async function handler(req: APIRequest) {
+  let restUrl = Deno.env.get("REST_URL");
+  if (restUrl == null) {
+    restUrl = "localhost:7000";
+    console.log("ENV variable not found");
+  }
   switch (req.params.action) {
     case "ping":
       console.debug("Ping node " + req.params[0]);
       const pingNode = await (await fetch(
-        "http://localhost:7000/network/ping/" + req.params[0],
+        `http://${restUrl}/network/ping/${req.params[0]}`,
       )).json();
       req.status(200).json(pingNode);
       break;
     case "autoping":
       console.debug("Calling autoping");
       const resultRequest = await fetch(
-        "http://localhost:7000/utility/getinfo",
+        `http://${restUrl}/utility/getinfo`,
       );
       const getInfoNode = await resultRequest.json();
       console.debug(JSON.stringify(getInfoNode));
       req.status(200).json(getInfoNode);
       break;
     case "listchannels":
-      const listChannelsRps = await fetch("http://localhost:7000/channel/listchannels");
+      const listChannelsRps = await fetch(
+        `http://${restUrl}/channel/listchannels`,
+      );
       const listChannels = await listChannelsRps.json();
       console.debug(JSON.stringify(listChannels));
       req.status(200).json(listChannels);
       break;
     case "listnodes":
-      const listNodesResp = await fetch("http://localhost:7000/network/listnodes");
+      const listNodesResp = await fetch(`http://${restUrl}/network/listnodes`);
       const listNodes = await listNodesResp.json();
       console.debug(JSON.stringify(listNodes));
       req.status(200).json(listNodes);

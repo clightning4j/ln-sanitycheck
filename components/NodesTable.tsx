@@ -10,7 +10,7 @@ import {
   TableHead,
   TableRow,
 } from "@material-ui/core";
-import Loading from 'Loading.tsx'
+import Loading from "Loading.tsx";
 
 interface NodesTableProps {
   nodes: Array<Object>;
@@ -20,51 +20,59 @@ interface NodesTableProps {
 class NodesTable extends React.Component<NodesTableProps> {
   constructor(props: PropsType) {
     super(props);
+    this.endLoad = this.endLoad.bind(this);
+  }
+
+  endLoad(setVisible, sendMessage) {
+    if (!this.props.isLoading) 
+      return;
+    setVisible(false);
+    sendMessage({"visible": true, "message": "Channels loaded"});
   }
 
   render() {
-    const { channels, nodes, ping, isLoading, endLoading} = this.props;
+    const { channels, nodes, ping, isLoading, endLoading, comunicate } = this.props;
     return (
       <React.Fragment>
-      <TableContainer component={Paper}>
-        <Table aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Color Node</TableCell>
-              <TableCell>Node id</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {nodes.map((node) => (
+        <TableContainer component={Paper}>
+          <Table aria-label="simple table">
+            <TableHead>
               <TableRow>
-                <TableCell component="th" scope="row">
-                  <Chip
-                    label={node["alias"]}
-                    style={{ background: "#" + node["color"] }}
-                  />
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {node["nodeId"]}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {new Date(node["lastTimestamp"]).toLocaleDateString()}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  <Button
-                    onClick={() => fetch("/lnnode/ping/" + node["nodeId"])}
-                  >
-                    Ping
-                  </Button>
-                </TableCell>
+                <TableCell>Color Node</TableCell>
+                <TableCell>Node id</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Actions</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      {isLoading && <Loading />}
-      {nodes.length > 0 && endLoading(false)}
+            </TableHead>
+            <TableBody>
+              {nodes.map((node) => (
+                <TableRow>
+                  <TableCell component="th" scope="row">
+                    <Chip
+                      label={node["alias"]}
+                      style={{ background: "#" + node["color"] }}
+                    />
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    {node["nodeId"]}
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    {new Date(node["lastTimestamp"]).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    <Button
+                      onClick={() => fetch("/lnnode/ping/" + node["nodeId"])}
+                    >
+                      Ping
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        {isLoading && <Loading />}
+        {nodes.length > 0 && this.endLoad(endLoading, comunicate)}
       </React.Fragment>
     );
   }

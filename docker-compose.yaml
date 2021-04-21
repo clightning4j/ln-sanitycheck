@@ -5,3 +5,5 @@ services:
       build: .
       network_mode: host
       restart: on-failure
+      environment:
+        - REST_URL=localhost:7000

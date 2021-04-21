@@ -12,7 +12,7 @@ export default function useNode(): [
   let [listChannels, setListChannels] = useState([]);
   let [listNodes, setListNodes] = useState([]);
   let [isOnline, setPigNode] = useState(false);
-  console;
+
   const ping = useCallback(() => {
     fetch("/api/lnnode/ping")
       .then(() => setPigNode(true))
@@ -63,15 +63,32 @@ export default function useNode(): [
 
   useEffect(() => {
     fetch("/api/lnnode").then((resp) =>
-      resp.json().catch(() => (setPigNode(false)))
+      resp.json().catch((e) => {
+        setPigNode(false);
+        setNodeInfo(undefined);
+        console.error(e);
+      })
     )
       .then((nodeInfo) => {
         setNodeInfo(nodeInfo);
         setPigNode(true);
       })
-      .catch((e) => console.error(e))
+      .catch((e) => {
+        setNodeInfo(undefined);
+        setPigNode(false);
+        console.error(e);
+      })
       .finally(() => {});
   }, []);
 
-  return [nodeInfo, listChannels, listNodes, isOnline, ping, autoping, getListChannels, getListNodes];
+  return [
+    nodeInfo,
+    listChannels,
+    listNodes,
+    isOnline,
+    ping,
+    autoping,
+    getListChannels,
+    getListNodes,
+  ];
 }
