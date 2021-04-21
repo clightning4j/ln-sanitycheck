@@ -9,4 +9,4 @@ COPY . .
 
 ## The production mode has some problem such as the following issue
 # https://github.com/alephjs/aleph.js/issues/211
-CMD [ "aleph", "run" ]
+CMD [ "aleph", "start" ]
