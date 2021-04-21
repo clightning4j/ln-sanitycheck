@@ -20,11 +20,18 @@ export default async function handler(req: APIRequest) {
       console.debug(JSON.stringify(getInfoNode));
       req.status(200).json(getInfoNode);
       break;
+    case "listchannels":
+      const listChannelsRps = await fetch("http://localhost:7000/channel/listchannels");
+      const listChannels = await listChannelsRps.json();
+      console.debug(JSON.stringify(listChannels));
+      req.status(200).json(listChannels);
+      break;
     case "listnodes":
-      const response = await fetch("http://localhost:7000/network/listnodes");
-      const listNodes = await response.json();
+      const listNodesResp = await fetch("http://localhost:7000/network/listnodes");
+      const listNodes = await listNodesResp.json();
       console.debug(JSON.stringify(listNodes));
       req.status(200).json(listNodes);
+      break;
     default:
       req.status(400).json({
         error: "UnknownAction",

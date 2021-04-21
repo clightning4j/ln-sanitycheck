@@ -10,6 +10,7 @@ import {
   TableHead,
   TableRow,
 } from "@material-ui/core";
+import Loading from 'Loading.tsx'
 
 interface NodesTableProps {
   nodes: Array<Object>;
@@ -22,8 +23,9 @@ class NodesTable extends React.Component<NodesTableProps> {
   }
 
   render() {
-    const { nodes, ping } = this.props;
+    const { channels, nodes, ping, isLoading, endLoading} = this.props;
     return (
+      <React.Fragment>
       <TableContainer component={Paper}>
         <Table aria-label="simple table">
           <TableHead>
@@ -61,6 +63,9 @@ class NodesTable extends React.Component<NodesTableProps> {
           </TableBody>
         </Table>
       </TableContainer>
+      {isLoading && <Loading />}
+      {nodes.length > 0 && endLoading(false)}
+      </React.Fragment>
     );
   }
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   AppBar,
   Box,
@@ -18,8 +18,10 @@ import useNode from "../lib/useNode.ts";
 import NodesTable from "../components/NodesTable.tsx";
 
 export default function Home() {
-  let [infoNode, listNodes, isOnline, ping, autoping, getListNodes] = useNode();
+  let [infoNode, listChannels, listNodes, isOnline, ping, autoping, getListChannels, getListNodes] = useNode();
   const [alerVisible, setAlertVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [render, setReander] = useState(true)
 
   const aliasNode = infoNode != undefined ? infoNode["alias"] : "";
 
@@ -29,6 +31,20 @@ export default function Home() {
     ? `${infoNode["id"]}@${addressesNode["address"]}:${addressesNode["port"]}`
     : "";
 
+    
+
+    useEffect(() => {
+      new Promise(resolve => setTimeout(() => resolve(), 2500)).then(() => {
+        const el = document.querySelector(".loader-container");
+        if (el) {
+          el.remove();  // removing the spinner element
+          setReander(false); // showing the app
+        }
+      });
+    });
+
+  if (render)
+    return null;
   return (
     <Container maxWidth="xl">
       <AppBar position="sticky">
@@ -96,7 +112,7 @@ export default function Home() {
                   </Grid>
                   <Grid item xs={6} space={3}>
                     <IconButton
-                      onClick={getListNodes}
+                      onClick={() => {setLoading(true); getListNodes();}}
                       color="inherit"
                       aria-label="reload"
                     >
@@ -108,8 +124,11 @@ export default function Home() {
             </Card>}
         </Grid>
         <NodesTable
+          channels={listChannels}
           nodes={listNodes}
           ping={ping}
+          isLoading={loading}
+          endLoading={setLoading}
         />
       </Box>
       {alerVisible &&

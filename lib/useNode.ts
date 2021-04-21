@@ -9,6 +9,7 @@ export default function useNode(): [
   () => void,
 ] {
   let [nodeInfo, setNodeInfo] = useState(undefined);
+  let [listChannels, setListChannels] = useState([]);
   let [listNodes, setListNodes] = useState([]);
   let [isOnline, setPigNode] = useState(false);
   console;
@@ -30,6 +31,20 @@ export default function useNode(): [
       })
       .catch((e) => console.error(e))
       .finally(() => {});
+  }, []);
+
+  const getListChannels = useCallback(() => {
+    fetch("/api/lnnode/listchannels").then((resp) =>
+      resp.json()
+        .catch((e) => (console.log(e)))
+    )
+      .then((listNodes) => {
+        console.debug(
+          `listnodes call with result: ${JSON.stringify(listNodes)}`,
+        );
+        setListChannels(listNodes["channels"]);
+      })
+      .catch((e) => console.error(e));
   }, []);
 
   const getListNodes = useCallback(() => {
@@ -58,5 +73,5 @@ export default function useNode(): [
       .finally(() => {});
   }, []);
 
-  return [nodeInfo, listNodes, isOnline, ping, autoping, getListNodes];
+  return [nodeInfo, listChannels, listNodes, isOnline, ping, autoping, getListChannels, getListNodes];
 }
