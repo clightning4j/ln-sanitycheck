@@ -16,7 +16,7 @@ import { Add, Menu, Sync } from "@material-ui/icons";
 import { QRCode } from "react-qr-svg";
 import useNode from "../lib/useNode.ts";
 import NodesTable from "../components/NodesTable.tsx";
-import Offiline from "../components/Offiline.tsx"
+import Offline from "../components/Offline.tsx"
 
 export default function Home() {
   let [
@@ -84,7 +84,7 @@ export default function Home() {
           justify="center"
           alignItems="center"
         >
-          {addressesNode === "" && <Offiline />} 
+          {addressesNode === "" && <Offline />}
           {addressesNode !== "" &&
             <Card>
               <CardContent>
