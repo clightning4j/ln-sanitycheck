@@ -24,14 +24,16 @@ class NodesTable extends React.Component<NodesTableProps> {
   }
 
   endLoad(setVisible, sendMessage) {
-    if (!this.props.isLoading) 
+    if (!this.props.isLoading) {
       return;
+    }
     setVisible(false);
-    sendMessage({"visible": true, "message": "Channels loaded"});
+    sendMessage({ "visible": true, "message": "Channels loaded" });
   }
 
   render() {
-    const { channels, nodes, ping, isLoading, endLoading, comunicate } = this.props;
+    const { channels, nodes, ping, isLoading, endLoading, comunicate } =
+      this.props;
     return (
       <React.Fragment>
         <TableContainer component={Paper}>

@@ -6,10 +6,10 @@ export default async function handler(req: APIRequest) {
     restUrl = "localhost:7000";
     console.log("ENV variable not found");
   }
-  const getInfoNode =
-    await (await fetch(`http://${restUrl}/utility/getinfo`)).json();
-  console.error(getInfoNode);
-  if (getInfoNode === undefined) {
+  const getInfoNode = await (await fetch(`http://${restUrl}/utility/getinfo`))
+    .json();
+  console.debug(getInfoNode);
+  if (getInfoNode == undefined) {
     req.status(500);
     return;
   }

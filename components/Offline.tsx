@@ -12,8 +12,8 @@ export default function Offline({ size = 90 }: { size?: number }) {
       justify="center"
     >
       <Grid item xs={3}>
-         <Typography variant="h6" style={{ flex: 1 }}>
-           The node is offline for the moment. I'm sorry
+        <Typography variant="h6" style={{ flex: 1 }}>
+          The node is offline for the moment. I'm sorry
         </Typography>
       </Grid>
     </Grid>
