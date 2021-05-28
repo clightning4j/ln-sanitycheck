@@ -94,6 +94,7 @@ class Home extends React.Component<unknown, State> {
         nodeAddresses: nodeInfo["address"],
       });
     } else {
+      console.error("Node offline ", nodeInfo, " size key are ", Object.keys(nodeInfo).length);
       this.setState({ infoNode: {}, nodeOnline: isOnline });
     }
   }
@@ -160,7 +161,7 @@ class Home extends React.Component<unknown, State> {
   }
 
   loadDom() {
-    new Promise((resolve) => setTimeout(() => resolve(), 100))
+    new Promise((resolve) => setTimeout(() => resolve(), 5000))
       .then(() => {
         const el = document.querySelector(".loader-container");
         if (el) {
