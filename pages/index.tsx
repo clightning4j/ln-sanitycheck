@@ -147,7 +147,13 @@ class Home extends React.Component<unknown, State> {
   async componentDidMount() {
     await this.getInfoNode();
     await this.getOpenedChannels();
-    this.loadDom();
+    const el = document.querySelector(".loader-container");
+    if (el && !this.state.ready) {
+      el.remove(); // removing the spinner element
+      this.setDomeReady(true); // showing the app
+      console.debug("Virtual Dom Ready Ready");
+    }
+    //this.loadDom();
   }
 
   loadDom() {
