@@ -11,11 +11,18 @@
 
 ## Required Deno
 
-- [Deno](https://deno.land/manual/getting_started/installation)
+Not ready to build, but if you want play you can build it with the following dependences
 
+#### System dependences
+
+- [Deno](https://deno.land/manual/getting_started/installation)
 - Aleph.js with the following command `deno install --unstable -A -f -n aleph https://deno.land/x/aleph@v0.3.0-alpha.31/cli.ts`
 
-#### With Docker and Docker Compose
+#### C-Lightning dependences
+
+- [lightning-rest](https://github.com/clightning4j/lightning-rest)
+
+#### Run the server
 
 ```bash
 git clone https://github.com/clightning4j/ln-sanitycheck.git
