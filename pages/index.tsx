@@ -161,7 +161,7 @@ class Home extends React.Component<unknown, State> {
   }
 
   loadDom() {
-    new Promise((resolve) => setTimeout(() => resolve(), 5000))
+    new Promise((resolve) => setTimeout(() => resolve(), 2000))
       .then(() => {
         const el = document.querySelector(".loader-container");
         if (el) {
