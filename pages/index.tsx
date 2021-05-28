@@ -262,7 +262,11 @@ class Home extends React.Component<unknown, State> {
                 </CardContent>
               </Card>}
           </Grid>
-          {this.state.addressNode !== "" && <div />}
+          {this.state.nodeChannels?.channels?.length > 0 && <NodesTable
+                channels={this.state.nodeChannels.channels}
+                //nodes={this.state.peers}
+                comunicate={this.changeAlertState}
+            />}
         </Box>
         <Snackbar
           anchorOrigin={{
