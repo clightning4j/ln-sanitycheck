@@ -31,6 +31,8 @@ class NodesTable extends React.Component<NodesTableProps> {
     sendMessage({ "visible": true, "message": "Channels loaded" });
   }
 
+  pingNode(id: string) { }
+
   render() {
     const { channels, nodes, ping, isLoading, endLoading, comunicate } =
       this.props;
@@ -40,8 +42,8 @@ class NodesTable extends React.Component<NodesTableProps> {
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Color Node</TableCell>
-                <TableCell>Node id</TableCell>
+                <TableCell>Label Node</TableCell>
+                <TableCell>Size</TableCell>
                 <TableCell>Status</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
