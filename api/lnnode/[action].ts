@@ -39,6 +39,13 @@ export default async function handler(req: APIRequest) {
       console.debug(JSON.stringify(listNodes));
       req.status(200).json(listNodes);
       break;
+    case "listfounds":
+      // /utility/listfounds
+      const listFoundsResp = await fetch(`http://${restUrl}/utility/listfounds`);
+      const listFounds = await listFoundsResp.json();
+      console.debug(JSON.stringify(listFounds));
+      req.status(200).json(listFounds);
+      break;
     default:
       req.status(400).json({
         error: "UnknownAction",

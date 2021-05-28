@@ -24,44 +24,52 @@ class NodesTable extends React.Component<NodesTableProps> {
   }
 
   endLoad(setVisible, sendMessage) {
-    if (!this.props.isLoading) 
+    if (!this.props.isLoading) {
       return;
+    }
     setVisible(false);
-    sendMessage({"visible": true, "message": "Channels loaded"});
+    sendMessage({ "visible": true, "message": "Channels loaded" });
   }
 
+  pingNode(id: string) { }
+
   render() {
-    const { channels, nodes, ping, isLoading, endLoading, comunicate } = this.props;
+    const { channels, nodes, comunicate } = this.props;
+    console.log(channels);
     return (
       <React.Fragment>
         <TableContainer component={Paper}>
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Color Node</TableCell>
-                <TableCell>Node id</TableCell>
+                <TableCell>Node Name</TableCell>
+                <TableCell>Node Id</TableCell>
+                <TableCell>Size</TableCell>
                 <TableCell>Status</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {nodes.map((node) => (
+              {channels.map((channel) => (
                 <TableRow>
                   <TableCell component="th" scope="row">
                     <Chip
-                      label={node["alias"]}
-                      style={{ background: "#" + node["color"] }}
+                      label="TODO"
+                      //style={{ background: "#" + node["color"] }}
                     />
                   </TableCell>
                   <TableCell component="th" scope="row">
-                    {node["nodeId"]}
+                    {channel["peerId"]}
                   </TableCell>
                   <TableCell component="th" scope="row">
-                    {new Date(node["lastTimestamp"]).toLocaleDateString()}
+                    {channel["channelSat"] + " sats"}
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    {channel["state"]}
                   </TableCell>
                   <TableCell component="th" scope="row">
                     <Button
-                      onClick={() => fetch("/lnnode/ping/" + node["nodeId"])}
+                      onClick={() => fetch("/lnnode/ping/" + channel["peerId"])}
                     >
                       Ping
                     </Button>
@@ -71,11 +79,15 @@ class NodesTable extends React.Component<NodesTableProps> {
             </TableBody>
           </Table>
         </TableContainer>
-        {isLoading && <Loading />}
-        {nodes.length > 0 && this.endLoad(endLoading, comunicate)}
       </React.Fragment>
     );
   }
 }
+
+/**
+ * 
+        {isLoading && <Loading />}
+        {nodes.length > 0 && this.endLoad(endLoading, comunicate)}
+ */
 
 export default NodesTable;

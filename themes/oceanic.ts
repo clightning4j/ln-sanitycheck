@@ -1,41 +1,41 @@
-import { createMuiTheme } from '@material-ui/core';
+import { createMuiTheme } from "@material-ui/core";
 
 const oceanic = createMuiTheme({
   palette: {
-    type: 'dark',
+    type: "dark",
     primary: {
-      main: '#263238',
+      main: "#263238",
     },
     secondary: {
-      main: '#32424A',
+      main: "#32424A",
     },
     background: {
-      default: '#263238',
-      paper: '#263238',
+      default: "#263238",
+      paper: "#263238",
     },
     text: {
-      primary: '#607D8B',
-      secondary: '#607D8B',
-      disabled: '#607D8B',
-      hint: '#607D8B',
+      primary: "#607D8B",
+      secondary: "#607D8B",
+      disabled: "#607D8B",
+      hint: "#607D8B",
     },
     error: {
-      main: '#ff0039',
+      main: "#ff0039",
     },
     warning: {
-      main: '#ff7518',
+      main: "#ff7518",
     },
     info: {
-      main: '#2f363d',
+      main: "#2f363d",
     },
     success: {
-      main: '#85e89d',
+      main: "#85e89d",
     },
-    divider: '#009688',
+    divider: "#009688",
     snackbar: {
-        backgroundColor: "lightgreen",
-        color: '#607D8B'
-    }
+      backgroundColor: "lightgreen",
+      color: "#607D8B",
+    },
   },
 });
 

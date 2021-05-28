@@ -1,9 +1,6 @@
 import React, { ComponentType } from "react";
-import {
-  CssBaseline,
-  MuiThemeProvider,
-} from "@material-ui/core";
-import oceanic from "./themes/oceanic.ts"
+import { CssBaseline, MuiThemeProvider } from "@material-ui/core";
+import oceanic from "./themes/oceanic.ts";
 
 export default function App(
   { Page, pageProps }: { Page: ComponentType<any>; pageProps: any },
