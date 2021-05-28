@@ -64,15 +64,10 @@ class Home extends React.Component<unknown, State> {
    * This function call getInfo RPC method
    * to update the UI with the last information.
    */
-  getInfoNode() {
-    NodeAPIController.getNodeInfoFromApi()
-      .then((result) => this.setNodeInfo(result))
-      .catch((err) =>
-        this.changeAlertState({
-          visible: true,
-          message: `Error from node: ${err}`,
-        })
-      );
+  async getInfoNode() {
+    let result = await NodeAPIController.getNodeInfoFromApi();
+    this.setNodeInfo(result);
+    //TODO catch the error
   }
 
   setNodeInfo(nodeInfo: Record<string, Object>) {
@@ -102,15 +97,10 @@ class Home extends React.Component<unknown, State> {
   /**
    * Get node channels from listFunds. 
    */
-  getOpenedChannels() {
-    NodeAPIController.getListFoundsFromApi()
-      .then((result) => this.setChannelsOpened(result))
-      .catch((err) =>
-        this.changeAlertState({
-          visible: true,
-          message: `Error from node: ${err}`,
-        })
-      );
+  async getOpenedChannels() {
+    let result = await NodeAPIController.getListFoundsFromApi()
+    this.setChannelsOpened(result);
+    //TODO catch the error
   }
 
   setChannelsOpened(channels: ListFounds) {
@@ -155,13 +145,13 @@ class Home extends React.Component<unknown, State> {
   }
 
   async componentDidMount() {
-    this.loadDom();
     await this.getInfoNode();
     await this.getOpenedChannels();
+    this.loadDom();
   }
 
   loadDom() {
-    new Promise((resolve) => setTimeout(() => resolve(), 2000))
+    new Promise((resolve) => setTimeout(() => resolve(), 1000))
       .then(() => {
         const el = document.querySelector(".loader-container");
         if (el) {
