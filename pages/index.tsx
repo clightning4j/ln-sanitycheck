@@ -154,10 +154,10 @@ class Home extends React.Component<unknown, State> {
     return `${this.state.infoNode["id"]}@${address.address}:${address.port}`;
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.loadDom();
-    this.getInfoNode();
-    this.getOpenedChannels();
+    await this.getInfoNode();
+    await this.getOpenedChannels();
   }
 
   loadDom() {
