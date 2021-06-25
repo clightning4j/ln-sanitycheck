@@ -40,10 +40,10 @@ class NodeAPIController {
           let nodes = await NodeAPIController.getListNodesFromApi();
           // FIXME: The opposit operation is better, because the list funds can be smaller than
           // all the node in the network.
-          let resp = funds.channels.map((channel) => {
-            let node = nodes.nodes.filter(node => node["nodeId"] === channel["peerId"]);
-            if (node)
-              channel["nodeInfo"] = node[0]; // For sure there peer is the same here
+          let resp = nodes.nodes.map((node) => {
+            let channel = funds.channels.filter(channel => node["nodeId"] === channel["peerId"]);
+            if (channel)
+              channel["nodeInfo"] = node; // For sure there peer is the same here
             return channel;
           });
           console.log("List funds with info");
