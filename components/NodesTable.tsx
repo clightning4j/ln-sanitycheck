@@ -84,7 +84,7 @@ class NodesTable extends React.Component<NodesTableProps> {
                   <TableCell component="th" scope="row">
                   <Chip
                       label={channel["connected"] ? "Online" : "Offine"}
-                      style={{ background: "#" +  (channel["connected"] ? "c3e88d" : "f07178")}}
+                      style={{ background: "#" +  (channel["connected"] ? "82ad44" : "f07178")}}
                     />
                     {}
                   </TableCell>
