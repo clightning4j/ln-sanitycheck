@@ -44,7 +44,8 @@ class NodeAPIController {
           nodes.nodes.forEach((node) => {
             let channel = funds.channels.filter(channel => node["nodeId"] === channel["peerId"]);
             if (channel) {
-              channel["nodeInfo"] = node; // For sure there peer is the same here
+              channel = channel[0];  // For sure there peer is the same here
+              channel["nodeInfo"] = node;
               resp.push(channel);
             }
           });
