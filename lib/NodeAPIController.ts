@@ -43,7 +43,7 @@ class NodeAPIController {
           let resp = funds.channels.map((channel) => {
             let node = nodes.nodes.filter(node => node["nodeId"] === channel["peerId"]);
             if (node)
-              channel["nodeInfo"] = node;
+              channel["nodeInfo"] = node[0]; // For sure there peer is the same here
             return channel;
           });
           console.log("List funds with info");

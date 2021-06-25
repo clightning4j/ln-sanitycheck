@@ -155,18 +155,19 @@ class Home extends React.Component<unknown, State> {
 
   async componentDidMount() {
     this.loadDom();
-    await this.getInfoNode();
-    await this.getOpenedChannels();
-    const el = document.querySelector(".loader-container");
-    if (el && !this.state.ready) {
-      el.remove(); // removing the spinner element
-      this.setDomeReady(true); // showing the app
-      console.debug("Virtual Dom Ready Ready");
-    }
+    this.getInfoNode().then(_ => {
+      const el = document.querySelector(".loader-container");
+      if (el && !this.state.ready) {
+        el.remove(); // removing the spinner element
+        this.setDomeReady(true); // showing the app
+        console.debug("Virtual Dom Ready Ready");
+      }
+    }).finally(() => this.getOpenedChannels());
+    
   }
 
   loadDom() {
-    new Promise((resolve) => setTimeout(() => resolve(), 20000))
+    new Promise((resolve) => setTimeout(() => resolve(), 6000))
       .then(() => {
         // In case of error we can remove the loading view
         if (!this.state.ready)
