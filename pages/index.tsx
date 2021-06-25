@@ -166,7 +166,7 @@ class Home extends React.Component<unknown, State> {
   }
 
   loadDom() {
-    new Promise((resolve) => setTimeout(() => resolve(), 8000))
+    new Promise((resolve) => setTimeout(() => resolve(), 20000))
       .then(() => {
         // In case of error we can remove the loading view
         if (!this.state.ready)

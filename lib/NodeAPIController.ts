@@ -42,7 +42,7 @@ class NodeAPIController {
           // all the node in the network.
           let resp = funds.channels.map((channel) => {
             let node = nodes.nodes.filter(node => node["nodeId"] === channel["peerId"]);
-            if (!node)
+            if (node)
               channel["nodeInfo"] = node;
             return channel;
           });
