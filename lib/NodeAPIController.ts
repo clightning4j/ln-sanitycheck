@@ -27,7 +27,7 @@ class NodeAPIController {
 
   static pingNodeWithId(id: string): Promise<Object> {
     return new Promise<Array<Object>>((resolve, reject) =>
-      fetch("/api/lnnode/ping/" + id)
+      fetch("/api/lnnode/ping/:" + id)
         .then((resp) => resolve(resp.json()))
         .catch((err) => reject(err))
     );
@@ -38,15 +38,13 @@ class NodeAPIController {
         try {
           let funds = await NodeAPIController.getListFoundsFromApi();
           let nodes = await NodeAPIController.getListNodesFromApi();
-          // FIXME: The opposit operation is better, because the list funds can be smaller than
-          // all the node in the network.
           let resp = []
           nodes.nodes.forEach((node) => {
             let channel = funds.channels.filter(channel => node["nodeId"] === channel["peerId"]);
             console.debug(channel);
             if (channel.length > 0) {
               channel = channel[0];  // For sure there peer is the same here
-              channel?.nodeInfo = node;
+              channel.nodeInfo = node;
               resp.push(channel);
             }
           });

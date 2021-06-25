@@ -63,6 +63,7 @@ class NodesTable extends React.Component<NodesTableProps> {
               <TableRow>
                 <TableCell>Node Name</TableCell>
                 <TableCell>Node Id</TableCell>
+                <TableCell>Status</TableCell>
                 <TableCell>Size</TableCell>
                 <TableCell>Status</TableCell>
                 <TableCell>Actions</TableCell>
@@ -79,6 +80,13 @@ class NodesTable extends React.Component<NodesTableProps> {
                   </TableCell>
                   <TableCell component="th" scope="row">
                     {channel["peerId"]}
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                  <Chip
+                      label={channel["connected"] ? "Online" : "Offine"}
+                      style={{ background: "#" +  (channel["connected"] ? "c3e88d" : "f07178")}}
+                    />
+                    {}
                   </TableCell>
                   <TableCell component="th" scope="row">
                     {channel["channelTotalSat"] + " sats"}
