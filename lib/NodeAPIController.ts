@@ -25,13 +25,37 @@ class NodeAPIController {
     );
   }
 
-  static getListNodesFromApi(): Promise<ListFounds> {
-    return new Promise<Record<string, Object>>((resolve, reject) =>
-      fetch("/api/lnnode/listnodes")
+  static pingNodeWithId(id: string): Promise<Object> {
+    return new Promise<Array<Object>>((resolve, reject) =>
+      fetch("/api/lnnode/ping/" + id)
         .then((resp) => resolve(resp.json()))
         .catch((err) => reject(err))
     );
   }
+
+  static getListFoundsFromApiWithNodeInfo(): Promise<ListFounds> {
+    return new Promise<ListFounds>(async (resolve, reject) => {
+        try {
+          let funds = await NodeAPIController.getListFoundsFromApi();
+          let nodes = await NodeAPIController.getListNodesFromApi();
+          // FIXME: The opposit operation is better, because the list funds can be smaller than
+          // all the node in the network.
+          let resp = funds.channels.map((channel) => {
+            let node = nodes.nodes.filter(node => node["nodeId"] === channel["peerId"]);
+            if (!node)
+              channel["nodeInfo"] = node;
+            return channel;
+          });
+          console.log("List funds with info");
+          console.log(resp);
+          resolve(resp);
+        } catch (error) {
+          reject(error);
+        }
+      }
+    );
+  }
+
 }
 
 export default NodeAPIController;

@@ -65,9 +65,12 @@ class Home extends React.Component<unknown, State> {
    * to update the UI with the last information.
    */
   async getInfoNode() {
-    let result = await NodeAPIController.getNodeInfoFromApi();
-    this.setNodeInfo(result);
-    //TODO catch the error
+    try {
+      let result = await NodeAPIController.getNodeInfoFromApi();
+      this.setNodeInfo(result);
+    } catch (error) {
+      this.changeAlertState({visible: true, message: `Error with message ${error}`});
+    }
   }
 
   setNodeInfo(nodeInfo: Record<string, Object>) {
@@ -79,7 +82,7 @@ class Home extends React.Component<unknown, State> {
     if (isOnline) {
       //assert(nodeInfo["address"].length > 0);
       let address = this.parseAddress(nodeInfo["address"][0], nodeInfo["id"]);
-      console.error("Address: ", address);
+      console.debug("Address: ", address);
       this.setState({
         infoNode: nodeInfo,
         nodeOnline: isOnline,
@@ -89,7 +92,7 @@ class Home extends React.Component<unknown, State> {
         nodeAddresses: nodeInfo["address"],
       });
     } else {
-      console.error("Node offline ", nodeInfo, " size key are ", Object.keys(nodeInfo).length);
+      console.debug("Node offline ", nodeInfo, " size key are ", Object.keys(nodeInfo).length);
       this.setState({ infoNode: {}, nodeOnline: isOnline });
     }
   }
@@ -98,8 +101,12 @@ class Home extends React.Component<unknown, State> {
    * Get node channels from listFunds. 
    */
   async getOpenedChannels() {
-    let result = await NodeAPIController.getListFoundsFromApi()
-    this.setChannelsOpened(result);
+    try {
+      let result = await NodeAPIController.getListFoundsFromApiWithNodeInfo()
+      this.setChannelsOpened(result);
+    } catch (error) {
+      this.changeAlertState({visible: true, message: `Error with message ${error}`});
+    }
     //TODO catch the error
   }
 
@@ -124,16 +131,18 @@ class Home extends React.Component<unknown, State> {
   }
 
   changeAddressWithType(type: string) {
+    let notFound = true;
     for (var addr of this.state.nodeAddresses) {
       console.debug("Analysis of address: ", addr);
       if (addr.type === type) {
+        notFound = false;
         console.debug("Found address with protocol: ", addr["type"]);
         let address = this.parseAddress(addr);
         this.setState({ addressNode: address, selectedAddress: addr });
-        return;
+        break;
       }
     }
-    this.changeAlertState({ visible: true, message: "Address not available" });
+    this.changeAlertState({ visible: notFound, message: "Address not available" });
   }
 
 
@@ -145,6 +154,7 @@ class Home extends React.Component<unknown, State> {
   }
 
   async componentDidMount() {
+    this.loadDom();
     await this.getInfoNode();
     await this.getOpenedChannels();
     const el = document.querySelector(".loader-container");
@@ -153,18 +163,14 @@ class Home extends React.Component<unknown, State> {
       this.setDomeReady(true); // showing the app
       console.debug("Virtual Dom Ready Ready");
     }
-    //this.loadDom();
   }
 
   loadDom() {
-    new Promise((resolve) => setTimeout(() => resolve(), 1000))
+    new Promise((resolve) => setTimeout(() => resolve(), 8000))
       .then(() => {
-        const el = document.querySelector(".loader-container");
-        if (el) {
-          el.remove(); // removing the spinner element
+        // In case of error we can remove the loading view
+        if (!this.state.ready)
           this.setDomeReady(true); // showing the app
-          console.debug("Virtual Dom Ready Ready");
-        }
       });
   }
 
@@ -259,8 +265,8 @@ class Home extends React.Component<unknown, State> {
                 </CardContent>
               </Card>}
           </Grid>
-          {this.state.nodeChannels?.channels?.length > 0 && <NodesTable
-                channels={this.state.nodeChannels.channels}
+          {this.state.nodeChannels?.length > 0 && <NodesTable
+                channels={this.state.nodeChannels}
                 //nodes={this.state.peers}
                 comunicate={this.changeAlertState}
             />}

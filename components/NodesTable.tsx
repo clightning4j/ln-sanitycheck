@@ -9,8 +9,10 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Snackbar
 } from "@material-ui/core";
-import Loading from "Loading.tsx";
+import NodeAPIController from "../lib/NodeAPIController.ts";
+
 
 interface NodesTableProps {
   nodes: Array<Object>;
@@ -20,10 +22,19 @@ interface NodesTableProps {
 class NodesTable extends React.Component<NodesTableProps> {
   constructor(props: PropsType) {
     super(props);
+
+    this.state = {
+      snackbar: {
+        visible: false,
+        message: "",
+      }
+    }
+
     this.endLoad = this.endLoad.bind(this);
+    this.pingNode = this.pingNode.bind(this);
   }
 
-  endLoad(setVisible, sendMessage) {
+  endLoad(setVisible: boolean, sendMessage: string) {
     if (!this.props.isLoading) {
       return;
     }
@@ -31,11 +42,19 @@ class NodesTable extends React.Component<NodesTableProps> {
     sendMessage({ "visible": true, "message": "Channels loaded" });
   }
 
-  pingNode(id: string) { }
+  async pingNode(id: string, snackbarCallback) {
+    NodeAPIController.pingNodeWithId(id).then(res => {
+      console.debug(`Result ping for the node ${res}`);
+      snackbarCallback({visible: true, message: `Node ${id} is up`});
+    })
+    .catch(error => {
+      console.error("Error received in ping operation is ", error);
+      snackbarCallback({visible: true, message: `Node ${id} ping throws a exception: \n${error.toString()}`});
+    });
+  }
 
   render() {
-    const { channels, nodes, comunicate } = this.props;
-    console.log(channels);
+    const { channels, comunicate } = this.props;
     return (
       <React.Fragment>
         <TableContainer component={Paper}>
@@ -54,22 +73,22 @@ class NodesTable extends React.Component<NodesTableProps> {
                 <TableRow>
                   <TableCell component="th" scope="row">
                     <Chip
-                      label="TODO"
-                      //style={{ background: "#" + node["color"] }}
+                      label={channels["nodeInfo"]["alias"]}
+                      style={{ background: "#" + channels["nodeInfo"]["color"] }}
                     />
                   </TableCell>
                   <TableCell component="th" scope="row">
                     {channel["peerId"]}
                   </TableCell>
                   <TableCell component="th" scope="row">
-                    {channel["channelSat"] + " sats"}
+                    {channel["channelTotalSat"] + " sats"}
                   </TableCell>
                   <TableCell component="th" scope="row">
                     {channel["state"]}
                   </TableCell>
                   <TableCell component="th" scope="row">
                     <Button
-                      onClick={() => fetch("/lnnode/ping/" + channel["peerId"])}
+                      onClick={() => this.pingNode(channel["peerId"], comunicate)}
                     >
                       Ping
                     </Button>
