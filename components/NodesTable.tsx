@@ -73,8 +73,8 @@ class NodesTable extends React.Component<NodesTableProps> {
                 <TableRow>
                   <TableCell component="th" scope="row">
                     <Chip
-                      label={channel["nodeInfo"]["alias"]}
-                      style={{ background: "#" + channel["nodeInfo"]["color"] }}
+                      label={channel.nodeInfo["alias"]}
+                      style={{ background: "#" + channel.nodeInfo["color"] }}
                     />
                   </TableCell>
                   <TableCell component="th" scope="row">

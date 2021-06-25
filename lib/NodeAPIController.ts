@@ -45,7 +45,7 @@ class NodeAPIController {
             let channel = funds.channels.filter(channel => node["nodeId"] === channel["peerId"]);
             if (channel) {
               channel = channel[0];  // For sure there peer is the same here
-              channel["nodeInfo"] = node;
+              channel.nodeInfo = node;
               resp.push(channel);
             }
           });
@@ -53,6 +53,7 @@ class NodeAPIController {
           console.log(resp);
           resolve(resp);
         } catch (error) {
+          console.error(error)
           reject(error);
         }
       }
